@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.urls import path
 from django.utils.html import mark_safe
-from .models import Category
 from django.contrib.auth.models import Permission
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
@@ -24,14 +23,14 @@ class AppAdminSite(admin.AdminSite):
 
 # Register your models here.
 
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-    list_filter = ['id', 'name']
-    search_fields = ['name']
+# class CategoryAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'name']
+#     list_filter = ['id', 'name']
+#     search_fields = ['name']
 
 
 
 admin_site = AppAdminSite(name="myapp")
 
-admin_site.register(Category,CategoryAdmin)
+# admin_site.register(Category,CategoryAdmin)
 admin_site.register(Permission)
