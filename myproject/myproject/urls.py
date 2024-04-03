@@ -39,7 +39,7 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
-# router.register('categories', views.CategoryViewSet, basename="categories")
+router.register('locations', views.LocationViewSet, basename="locations")
 
 urlpatterns = [
     path('', include(router.urls)),
