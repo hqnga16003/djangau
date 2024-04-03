@@ -36,6 +36,9 @@ class Bus(models.Model):
     license_plate = models.CharField(max_length=50, unique=True)
     total_seats = models.PositiveIntegerField(default=40)
 
+    def get_total_seats(self):
+        return self.total_seats
+
     def __str__(self):
         return f"{self.license_plate}"
 
@@ -65,7 +68,6 @@ class BusRoute(models.Model):
         return self.price
 
 
-
 class BusSchedule(models.Model):
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE, related_name="bus_schedules")
     bus_route = models.ForeignKey(BusRoute, on_delete=models.CASCADE, related_name="route_schedules")
@@ -77,13 +79,13 @@ class BusSchedule(models.Model):
     number_of_seats_booked = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.bus}: {self.bus_route}"
+        return f"{self.bus}:{self.bus_route} Date:{self.departure_date} Time:{self.departure_time}"
 
     class Meta:
         unique_together = (("bus", "departure_date", "departure_time"),)
 
     def is_seat_available(self):
-        return self.bus.get_seats() > self.number_of_seats_booked
+        return self.bus.get_total_seats() > self.number_of_seats_booked
 
     def book_seat(self):
         if self.is_seat_available():
@@ -103,7 +105,6 @@ class BusSchedule(models.Model):
         return self.bus_route.get_price() + self.surcharge
 
 
-
 class Booking(models.Model):
     bus_schedule = models.ForeignKey(BusSchedule, on_delete=models.CASCADE,
                                      related_name="bookings")
@@ -113,10 +114,16 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     total_seats = models.PositiveIntegerField(default=1)
 
+    def __str__(self):
+        return f"{self.bus_schedule}: {self.customer}"
+
 
 class Seat(models.Model):
     number_seat = models.IntegerField()
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="seats")
+
+    def __str__(self):
+        return f"{self.number_seat}: {self.booking}"
 
 
 class CustomerReview(models.Model):
@@ -126,3 +133,6 @@ class CustomerReview(models.Model):
     review_text = models.TextField()
     rating = models.IntegerField(choices=((1, "Poor"), (2, "Fair"), (3, "Good"), (4, "Very Good"), (5, "Excellent")))
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.reviewed_trip}: {self.booking}"
