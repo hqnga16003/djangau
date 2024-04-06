@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -61,9 +62,9 @@ MIDDLEWARE = [
 import cloudinary
 
 cloudinary.config(
-    cloud_name="dy1unykph",
-    api_key="238791983534257",
-    api_secret="_J2MkfDJ1DwRe1uAn5TKozXup0U"
+    cloud_name="dy6rtaxgh",
+    api_key="248782787578731",
+    api_secret="HyqvpKfQ66sEQQnXvh8kPqPvQ-o"
 )
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -96,8 +97,8 @@ REST_FRAMEWORK = {
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     )
 }
-CLIENT_ID = '5M9qM8jRfuJoyvBTbOHp5F13OPaDMCvhUmXa6M76'
-CLIENT_SECRET = 'S5DPguUfKAILKeAYj0PIegUhnwU546SlAquOSzJvjYEskZ7tCWThQ41ONkkON1EcHOh8NnJOplnPXFUJLj1oZrzBnVx7RaYHCXBTGPjjn6xISKwRyY8uAK6JBZmZTD51'
+CLIENT_ID = 'Gi8ILsxRL5KMCcSGK4U2VkKBya1XbmkH4xVQ89wb'
+CLIENT_SECRET = 'wXOq5DYtrmP6saQql1vp5hrkESR22aNhBJLSsJYR2rIhoO5xcHBIlHJJP7M9Lc4rws6nG85WoObaEvwFoOLBr9jB6V9rqga0STOJwdMAZ46VBOOfjk2wRpN66Hb4buxK'
 
 
 # Database
@@ -159,5 +160,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 OAUTH2_PROVIDER = {
-    'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+    'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
 }
