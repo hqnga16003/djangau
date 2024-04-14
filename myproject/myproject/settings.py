@@ -61,9 +61,9 @@ MIDDLEWARE = [
 import cloudinary
 
 cloudinary.config(
-    cloud_name="dy1unykph",
-    api_key="238791983534257",
-    api_secret="_J2MkfDJ1DwRe1uAn5TKozXup0U"
+    cloud_name="dy6rtaxgh",
+    api_key="248782787578731",
+    api_secret="HyqvpKfQ66sEQQnXvh8kPqPvQ-o"
 )
 
 CORS_ALLOW_ALL_ORIGINS = True
