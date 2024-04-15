@@ -8,11 +8,15 @@ from .serializer import LocationSerializer, UserSerializer
 from rest_framework.decorators import action
 from .perms import OwnerPermission
 
+from rest_framework.permissions import IsAuthenticated
 
 class LocationViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+
+
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):

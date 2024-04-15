@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -100,6 +101,7 @@ CLIENT_ID = '6LStzfMcHulypdjWzcI5E2jMSemcyMMwIAe1SdTk'
 CLIENT_SECRET = '2vTZryFLXnJ5KI6EBfuW1cUaYCqoCRWK11wDc2JE0cWYyrLTSZhX6jtivVWZ542zWh66PoDkxcV3Fqr80YDixos2Or26j0Yl6vU0Fpd4sHi67Z9Hy7KMCPcKJioP6pFv'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -161,3 +163,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # OAUTH2_PROVIDER = {
 #     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
 # }
+
