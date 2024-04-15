@@ -35,12 +35,16 @@ schema_view = get_schema_view(
         license=openapi.License(name="Nguyen Trung Hau@2024"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=(permissions.AllowAny),
 )
 
 router = routers.DefaultRouter()
 router.register('locations', views.LocationViewSet, basename="locations")
+router.register('users', views.UserViewSet, basename="users")
 
+# router.register('courses', views.CourseViewSet, basename="courses")
+# router.register('lessons', views.LessonViewSet, basename="lessons")
+# router.register('comments', views.CommentViewSet, basename="comments")
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin_site.urls),
@@ -58,3 +62,13 @@ urlpatterns = [
     schema_view.with_ui('redoc', cache_timeout=0),
     name='schema-redoc')
 ]
+
+
+
+
+
+
+
+
+
+
