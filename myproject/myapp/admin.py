@@ -6,7 +6,7 @@ from django.utils.html import mark_safe
 from django.contrib.auth.models import Permission
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-from myapp.models import Location, User, Bus
+from myapp.models import Location, User, Bus, BusRoute, BusSchedule, Ticket
 
 
 class AppAdminSite(admin.AdminSite):
@@ -36,19 +36,19 @@ class BusAdmin(admin.ModelAdmin):
     list_display = ['id', 'license_plate', 'total_seats']
 
 
-#
-# class BusRouteAdmin(admin.ModelAdmin):
-#     list_display = ['id', 'departure_point', 'arrival_point', 'is_active', 'price', 'estimated_travel_time']
-#
-#
-#
-#
-#
-#
-# class BusScheduleAdmin(admin.ModelAdmin):
-#     list_display = ['id', 'bus', 'bus_route', 'assigned_driver', 'departure_date', 'departure_time', 'surcharge',
-#                     'number_of_seats_booked']
-#
+class BusRouteAdmin(admin.ModelAdmin):
+    list_display = ['id', 'departure_point', 'arrival_point', 'is_active', 'price', 'estimated_travel_time_in_hours']
+
+
+class BusScheduleAdmin(admin.ModelAdmin):
+    list_display = ['id', 'bus', 'bus_route', 'departure_date', 'departure_time', 'arrival_date', 'arrival_time',
+                    'surcharge']
+
+
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'bus_schedule', 'seat_number', 'booking_date', 'booking_status', ]
+
+
 #
 # class BookingAdmin(admin.ModelAdmin):
 #     list_display = ['id', 'bus_schedule', 'sales_staff','customer', 'is_active', 'created_at', 'total_seats']
@@ -67,8 +67,11 @@ admin_site = AppAdminSite(name="myapp")
 admin_site.register(User, UserAdmin)
 admin_site.register(Location, LocationAdmin)
 admin_site.register(Bus, BusAdmin)
+admin_site.register(BusRoute, BusRouteAdmin)
 
-# admin_site.register(BusRoute, BusRouteAdmin)
+admin_site.register(BusSchedule, BusScheduleAdmin)
+admin_site.register(Ticket, TicketAdmin)
+
 # admin_site.register(Bus, BusAdmin)
 # admin_site.register(BusSchedule, BusScheduleAdmin)
 # admin_site.register(Booking, BookingAdmin)

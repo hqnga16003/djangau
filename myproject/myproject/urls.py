@@ -41,12 +41,16 @@ schema_view = get_schema_view(
 router = routers.DefaultRouter()
 router.register('locations', views.LocationViewSet, basename="locations")
 router.register('users', views.UserViewSet, basename="users")
+router.register('buses', views.BusViewSet, basename="buses")
+router.register('busRoute', views.BusRouteViewSet, basename="busRoute")
+router.register('busSchedule', views.BusScheduleViewSet, basename="busSchedule")
+router.register('ticket', views.TicketViewSet, basename="ticket")
 
-# router.register('courses', views.CourseViewSet, basename="courses")
-# router.register('lessons', views.LessonViewSet, basename="lessons")
-# router.register('comments', views.CommentViewSet, basename="comments")
+
 urlpatterns = [
     path('', include(router.urls)),
+    # path('locations/<int:id>/', views.LocationRetrieveUpdateDestroy.as_view(),name='update'),
+
     path('admin/', admin_site.urls),
     path('o/', include('oauth2_provider.urls',
     namespace='oauth2_provider')),
