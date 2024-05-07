@@ -12,7 +12,7 @@ class LocationSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'avatar', 'user_type']
+        fields = ['id', 'username', 'email', 'avatar', 'user_type', 'password']
         extra_kwargs = {
             'password': {
                 'write_only': True
@@ -41,6 +41,7 @@ class BusScheduleSerializer(ModelSerializer):
     class Meta:
         model = BusSchedule
         fields = '__all__'
+
 
 class TicketSerializer(ModelSerializer):
     class Meta:

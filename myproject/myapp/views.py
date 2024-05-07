@@ -78,11 +78,13 @@ class UserViewSet(viewsets.ViewSet, generics.ListCreateAPIView):
 
     @action(methods=['put'], url_path="update", detail=False)
     def update_current_user(self, request):
-        serializer = UserSerializer(request.user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if 'avatar' in request.data:
+            user = request.user
+            user.avatar = request.data['avatar']
+            user.save()
+            return Response({"message": "Avatar updated successfully"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "No 'avatar' provided"}, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
