@@ -2,6 +2,7 @@ from datetime import date
 
 from django.shortcuts import render
 from rest_framework import viewsets, permissions, generics, status, parsers, filters
+from rest_framework.parsers import FormParser, JSONParser
 from rest_framework.response import Response
 
 from .models import Location, User, Bus, BusRoute, BusSchedule, Ticket
@@ -64,7 +65,7 @@ class LocationViewSet(viewsets.ViewSet, generics.ListCreateAPIView, ):
 class UserViewSet(viewsets.ViewSet, generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    parser_classes = [parsers.MultiPartParser]
+    parser_classes = (FormParser, parsers.MultiPartParser, JSONParser)
     permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
@@ -160,9 +161,22 @@ class BusScheduleViewSet(viewsets.ViewSet, generics.ListAPIView):
             return Response({'error': 'Invalid location_id format (must be an integer)'}, status=400)
 
         queryset = BusSchedule.objects.filter(bus_route__departure_point=id_departure_point,
-                                              bus_route__arrival_point=id_arrival_point,departure_date=departure_date_obj)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+                                              bus_route__arrival_point=id_arrival_point,
+                                              departure_date=departure_date_obj)
+        data = []
+        for schedule in queryset:
+            data.append({
+                "id": schedule.id,
+                "departure_date": schedule.departure_date.isoformat(),
+                "departure_time": schedule.departure_time.isoformat(),
+                "arrival_date": schedule.arrival_date.isoformat() if schedule.arrival_date else None,
+                "arrival_time": schedule.arrival_time.isoformat() if schedule.arrival_time else None,
+                "surcharge": schedule.surcharge + schedule.bus_route.price,
+                "bus.license_plate": schedule.bus.license_plate,
+                "bus_route": f"{schedule.bus_route.departure_point.name} - {schedule.bus_route.arrival_point.name}"
+            })
+
+        return Response(data)
 
 class TicketViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = Ticket.objects.all()  # Get all tickets by default

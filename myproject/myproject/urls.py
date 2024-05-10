@@ -1,4 +1,3 @@
-
 """
 URL configuration for ecourse project.
 
@@ -46,33 +45,21 @@ router.register('busRoute', views.BusRouteViewSet, basename="busRoute")
 router.register('busSchedule', views.BusScheduleViewSet, basename="busSchedule")
 router.register('ticket', views.TicketViewSet, basename="ticket")
 
-
 urlpatterns = [
     path('', include(router.urls)),
     # path('locations/<int:id>/', views.LocationRetrieveUpdateDestroy.as_view(),name='update'),
 
     path('admin/', admin_site.urls),
-    path('o/', include('oauth2_provider.urls',
-    namespace='oauth2_provider')),
-    re_path(r'^ckeditor/',include('ckeditor_uploader.urls')),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
-    schema_view.without_ui(cache_timeout=0),
-    name='schema-json'),
+            schema_view.without_ui(cache_timeout=0),
+            name='schema-json'),
     re_path(r'^swagger/$',
-    schema_view.with_ui('swagger', cache_timeout=0),
-    name='schema-swagger-ui'),
+            schema_view.with_ui('swagger', cache_timeout=0),
+            name='schema-swagger-ui'),
     re_path(r'^redoc/$',
-    schema_view.with_ui('redoc', cache_timeout=0),
-    name='schema-redoc')
+            schema_view.with_ui('redoc', cache_timeout=0),
+            name='schema-redoc')
 ]
-
-
-
-
-
-
-
-
-
-
