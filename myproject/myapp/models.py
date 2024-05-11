@@ -114,7 +114,17 @@ class Ticket(models.Model):
     booking_status = models.CharField(max_length=20, choices=[('CONFIRMED', 'Confirmed'),
                                                               ('CANCELLED', 'Cancelled')], default='CONFIRMED')
 
+    class Meta:
+        unique_together = ['bus_schedule', 'seat_number', 'booking_status']
+
     def save(self, *args, **kwargs):
+        if self.booking_status == 'CONFIRMED':
+            existing_confirmed_ticket = Ticket.objects.filter(bus_schedule=self.bus_schedule,
+                                                              seat_number=self.seat_number,
+                                                              booking_status='CONFIRMED').exists()
+            if existing_confirmed_ticket:
+                raise ValidationError('This seat is already booked for the selected schedule.')
+
         bus_schedule = self.bus_schedule
         bus_route = bus_schedule.bus_route
         self.price = bus_route.price + bus_schedule.surcharge

@@ -1,6 +1,7 @@
-from datetime import date
+from datetime import date, datetime
 
 from django.shortcuts import render
+from oauth2_provider.oauth2_validators import AccessToken
 from rest_framework import viewsets, permissions, generics, status, parsers, filters
 from rest_framework.parsers import FormParser, JSONParser
 from rest_framework.response import Response
@@ -20,7 +21,7 @@ class LocationViewSet(viewsets.ViewSet, generics.ListCreateAPIView, ):
     serializer_class = LocationSerializer
     lookup_field = 'id'
 
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         locations = self.get_queryset()
@@ -67,6 +68,22 @@ class UserViewSet(viewsets.ViewSet, generics.ListCreateAPIView):
     serializer_class = UserSerializer
     parser_classes = (FormParser, parsers.MultiPartParser, JSONParser)
     permission_classes = [permissions.IsAuthenticated]
+
+    @action(methods=['post'], url_path="logout", detail=False)
+    def logout(self, request):
+        authorization_header = request.META.get('HTTP_AUTHORIZATION')
+
+        if authorization_header:
+            token = authorization_header.split()[1]
+            try:
+                access_token = AccessToken.objects.get(token=token)
+                access_token.delete()
+                return Response({'message': 'Logout successful'}, status=200)
+            except AccessToken.DoesNotExist:
+                return Response({'error': 'Invalid token'}, status=400)
+        else:
+            return Response({'error': 'Authorization header missing'}, status=400)
+
 
     def get_permissions(self):
         if self.action.__eq__('get_current'):
@@ -138,7 +155,28 @@ class BusScheduleViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = BusSchedule.objects.all()
     serializer_class = BusScheduleSerializer
 
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+
+    @action(methods=['get'], url_path="driver", detail=False)
+    def get_bus_schedule_of_day(self, request):
+        if not request.user.user_type == 'driver':
+            return Response({'error': 'Only drivers can access this endpoint'}, status=403)
+        date_param = request.query_params.get('date')
+        if date_param:
+            try:
+                date = datetime.strptime(date_param, '%Y-%m-%d').date()
+            except ValueError:
+                return Response({'error': 'Invalid date format. Use YYYY-MM-DD.'}, status=400)
+        else:
+            date = datetime.now().date()
+        try:
+            bus = request.user.bus
+        except Bus.DoesNotExist:
+            return Response({'error': 'Driver does not have assigned bus'}, status=400)
+
+        bus_schedules = BusSchedule.objects.filter(departure_date=date, bus=bus)
+        serializer = self.serializer_class(bus_schedules, many=True)
+        return Response(serializer.data)
 
     def list(self, request, *args, **kwargs):
         departure_point = request.query_params.get('id_departure_point')
